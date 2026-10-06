@@ -95,7 +95,7 @@ Como ya tenemos la imagen, procedemos a contar los píxeles blancos de las filas
 <br>
 
 <p align="center">
-  <img src="Imagenes/sobel.gif" alt="evolucion" width="500">
+  <img src="Imagenes/evolucion_sobel.gif" alt="evolucion" width="1000">
 </p>
 
 <br>
