@@ -1,4 +1,9 @@
 # Práctica 1
+
+Hecho por:
+  - [Eduardo Arbelo Rua-Figueroa](https://github.com/edulanarf)
+  - [Pablo Campos Rico](https://github.com/pabr0)
+
 ## Índice
 
 - [Ajedrez](#ajedrez)
