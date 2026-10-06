@@ -1,4 +1,7 @@
 # Práctica 2
+
+En esta tarea tratamos de aplicar algoritmos de detección de bordes en imágenes. Se aplica el algoritmo de Canny y el de Sobel y se observan las diferencias
+
 ## Índice
 
 - [Canny](#canny)
@@ -36,4 +39,57 @@ umbral = max(rows) * 0.9
 filas_sel = np.where(rows >= umbral)[0]
 ```
 
+**Imagen Resultado Canny:**  
+
+<br> 
+  <p align="center">
+    <img src="Imagenes/canny.png" alt="canny" width="1000">
+  </p>
+<br>
+
 # Sobel
+
+Se aplica un suavizado a la imagen (en este caso un desenfoque gaussiano) en escala de grises
+
+```
+ggris = cv2.GaussianBlur(gris, (3, 3), 0)
+```
+
+Detectamos los bordes horizontales y verticales utilizando el algoritmo de Sobel:
+
+```
+sobelx = cv2.Sobel(ggris, cv2.CV_64F, 1, 0)
+sobely = cv2.Sobel(ggris, cv2.CV_64F, 0, 1)
+```
+
+Se combina los datos verticales y horizontales en una única variable y lo convertimos a 8 bits:
+
+```
+sobel = cv2.add(sobelx, sobely)
+sobel_8u = cv2.convertScaleAbs(sobel)
+```
+
+Se aplica un umbral a la imagen para resaltar los bordes de la imagen:
+
+```
+valorUmbral = 40
+_, imagenUmbralizada = cv2.threshold(sobel_8u, valorUmbral, 255, cv2.THRESH_BINARY)
+```
+
+Como ya tenemos la imagen, procedemos a contar los píxeles blancos de las filas y de las columnas de la misma manera que en Canny y obtenemos el siguiente resultado:
+
+**Imagen Resultado Sobel:**  
+
+<br> 
+  <p align="center">
+    <img src="Imagenes/sobel.png" alt="canny" width="1000">
+  </p>
+<br>
+
+
+
+
+
+
+
+
