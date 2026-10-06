@@ -2,6 +2,10 @@
 
 En esta tarea tratamos de aplicar algoritmos de detección de bordes en imágenes. Se aplica el algoritmo de Canny y el de Sobel y se observan las diferencias
 
+Hecho por:
+  - [Eduardo Arbelo Rua-Figueroa](https://github.com/edulanarf)
+  - [Pablo Campos Rico](https://github.com/pabr0)
+
 ## Índice
 
 - [Canny](#canny)
@@ -82,9 +86,12 @@ Como ya tenemos la imagen, procedemos a contar los píxeles blancos de las filas
 
 <br> 
   <p align="center">
-    <img src="Imagenes/sobel.png" alt="canny" width="1000">
+    <img src="Imagenes/Sobel.png" alt="canny" width="1000">
   </p>
 <br>
+
+**Imagen Comparativa Canny vs Sobel**
+
 
 
 
