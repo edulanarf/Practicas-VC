@@ -92,10 +92,13 @@ Como ya tenemos la imagen, procedemos a contar los píxeles blancos de las filas
 
 **Imagen Comparativa Canny vs Sobel**
 
+<br> 
+  <p align="center">
+    <img src="Imagenes/cannyvssobel.png" alt="comparacion" width="1000">
+  </p>
+<br>
 
-
-
-
+En este caso vemos que la imagen de canny es mucho mas oscura que la de sobel. Esto es debido a que en la imagen de sobel hemos utilizado un umbral mucho menor para poder obtener varios "picos" que superen el valor del umbral y obtener un resultado más vistoso.
 
 
 
