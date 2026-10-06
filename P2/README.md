@@ -90,6 +90,16 @@ Como ya tenemos la imagen, procedemos a contar los píxeles blancos de las filas
   </p>
 <br>
 
+**Evolución del umbral**
+
+<br>
+
+<p align="center">
+  <img src="Imagenes/sobel.gif" alt="evolucion" width="500">
+</p>
+
+<br>
+
 **Imagen Comparativa Canny vs Sobel**
 
 <br> 
