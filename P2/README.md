@@ -151,3 +151,11 @@ if len(coordenadas_x) > 50:
     
     cv2.arrowedLine(frame, punto_inicio, punto_fin, (0, 255, 0), 4) 
 ```
+
+<br>
+
+<p align="center">
+  <img src="Imagenes/video.gif" alt="" width="500">
+</p>
+
+<br>
