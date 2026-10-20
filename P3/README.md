@@ -60,8 +60,6 @@ Luego obtenemos el color predominante del fondo: De esta manera podemos saber si
         mask[:, 0],
         mask[:, -1],
     ))
-
-    # Se determina el color del fondo:
     if np.mean(border) > 127:
         mask = cv2.bitwise_not(mask)
 
@@ -116,4 +114,118 @@ Mediante esta funcion se calculan las características reales de cada imagen de 
                 )
             ) is not None ]
 ```
+
+### **Función fit_normalizer()**
+
+Se normalizan las caracteristicas calculando el rango intercuartílico. Este rango mide la dispersión de los valores centrales de cada característica.
+
+```
+    q75, q25 = np.percentile(
+        all_features,
+        [75, 25],
+        axis=0,
+    )
+    scale = q75 - q25
+    fallback = np.std(all_features, axis=0)
+    scale = np.where(scale > 1e-8, scale, fallback)
+    scale = np.where(scale > 1e-8, scale, 1.0)
+
+    normalized_features = {
+        label: (features - center) / scale
+        for label, features in reference_features.items()
+    }
+```
+
+### **Función classify_particle()**
+
+Mediante esta función, se clasifica cada particula la cual se encuentra dentro de un recorte (crop). La clasificación se lleva acabo mediante las caracteristicas obtenidas en la función extract_features(). Estas características tienen un peso asignado:
+
+- Circularidad	            :1.5
+- Solidez	                  :1.5
+- Relación de aspecto	      :1.5
+- Relación de ejes	        :1.0
+- Ocupación del rectángulo	:20.0
+
+Recorremos el siguiente bucle:
+
+```
+for label, reference_vectors in normalized_references.items():
+```
+En cada iteración se calcula la distancia geometrica para:
+
+-  shape
+-  color
+
+Por otro lado, se calcula la distancia final sumando ```shape x peso de shape + color x peso de color```
+
+```
+        shape_distances = np.sqrt(
+            np.sum(
+                differences[:, :5] ** 2 * FEATURE_WEIGHTS,
+                axis=1,
+            )
+        )
+
+        color_distances = np.linalg.norm(
+            differences[:, 5:8],
+            axis=1,
+        )
+
+        distances = (
+            SHAPE_WEIGHT * shape_distances
+            + COLOR_WEIGHT * color_distances
+        )
+```
+
+por último se seleccionan las 3 referencias mas cercanas (K_NEIGHBORS = 3):
+
+```
+k = min(K_NEIGHBORS, len(distances))
+nearest = np.partition(distances, k - 1)[:k]
+```
+
+Y devolvemos la predicción:
+
+```
+    prediction = min(class_distances, key=class_distances.get)
+    return prediction, class_distances
+```
+
+### **Función evaluate_predictions()**
+
+A través de esta función, se evaluan los datos obtenidos de las predicciones comparando los datos reales con los obtenidos.
+
+En concreto, se encarga de crear la matriz de confusión:
+
+```
+    classes = sorted(set(y_true) | set(y_pred))
+
+    matrix = confusion_matrix(
+        y_true,
+        y_pred,
+        labels=classes,
+    )
+
+    display = ConfusionMatrixDisplay(
+        confusion_matrix=matrix,
+        display_labels=classes,
+    )
+
+    display.plot(cmap="Reds", values_format="d")
+    plt.title("Matriz de confusión")
+    plt.tight_layout()
+    plt.show()
+```
+
+<br> 
+  <p align="center">
+    <img src="Imagenes/MatrizConfusion.png" alt="Matriz confusión" width="500">
+  </p>
+<br>
+
+
+### **Función classify_test_image()**
+
+Esta funcion se encarga de conectar el clasificador con los datos obtenidos de la imagen del test. Se pueden observar los resultados correctos rodeados de un cuadrado verde y los incorrectos de color rojo.
+
 
