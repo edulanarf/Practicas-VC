@@ -8,7 +8,7 @@ Las prácticas se organizan de forma modular en directorios independientes. Cada
 
 *  **[Práctica 1 (P1)](./P1/)** - Introducción a OpenCV y procesamiento básico de imágenes.
 *  **[Práctica 2 (P2)](./P2/)** - Funciones básicas de OpenCV
-*  **[Práctica 3 (P3)](./P3/)** - Detección y reconocimiento de formas.
+*  **[Práctica 3 (P3)](./P3/)** - Detección y reconocimiento de formas.  
 Realizado por:
 - Eduardo Arbelo Rua-Figueroa
 - Pablo Campos Rico
