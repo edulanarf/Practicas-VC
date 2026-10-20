@@ -9,9 +9,9 @@ Hecho por:
 ## Índice
 
 - [Monedas](#monedas)
-- [Microplásticos](#microplásticos)
+- [Partículas](#partículas)
 
 ## Monedas
 
-## Microplásticos
+## Partículas
 
