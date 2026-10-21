@@ -331,6 +331,7 @@ Esta funcion se encarga de conectar el clasificador con los datos obtenidos de l
     <img src="Imagenes/Comparacion.png" alt="imagen test" width="500">
   </p>
 <br>
+
 ### **Función main()**
  
 Orden de ejecución:
