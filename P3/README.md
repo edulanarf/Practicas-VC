@@ -217,6 +217,12 @@ En concreto, se encarga de crear la matriz de confusión:
     plt.show()
 ```
 
+**MATRIZ CONFUSIÓN**
+
+Como se puede observar en la matriz confusión, se han detectado correctamente un 70% de las partículas. Entre estas se han acertado correctamente: 57 FRA, 18 PEL y 9 TAR, es decir 84 partículas de 120. Por otro lado, se han detectado de manera errónea: 6 PEL y 3 TAR que deberían haberse detectado como FRA, 20 FRA que deberían haberse detectado como PEL y por último 5 FRA y 2 PEL que deberían haberse detectado como TAR.  
+
+Mediante estos datos podemos concluir que la detección se ha realizado de manera exitosa para los FRA y los TAR. En cambio los PEL se han identificado mayormente como FRA.
+
 <br> 
   <p align="center">
     <img src="Imagenes/MatrizConfusion.png" alt="Matriz confusión" width="500">
@@ -229,3 +235,11 @@ En concreto, se encarga de crear la matriz de confusión:
 Esta funcion se encarga de conectar el clasificador con los datos obtenidos de la imagen del test. Se pueden observar los resultados correctos rodeados de un cuadrado verde y los incorrectos de color rojo.
 
 
+**DETECCIÓN DE PARTÍCULAS**
+
+<br> 
+  <p align="center">
+    <img src="Imagenes/Comparacion.png" alt="imagen test" width="500">
+    <img src="Imagenes/Comparacion.png" alt="imagen test" width="500">
+  </p>
+<br>
