@@ -239,7 +239,22 @@ Esta funcion se encarga de conectar el clasificador con los datos obtenidos de l
 
 <br> 
   <p align="center">
-    <img src="Imagenes/Comparacion.png" alt="imagen test" width="500">
+    <img src="Imagenes/test.jpg" alt="test" width="500">
     <img src="Imagenes/Comparacion.png" alt="imagen test" width="500">
   </p>
 <br>
+
+### **Función main()**
+
+Orden de ejecución:
+
+1. build_reference_features(TRAIN_IMAGES): extrae las características de las imágenes de referencia FRA, PEL y TAR.
+2. fit_normalizer(reference_features): calcula los valores necesarios para normalizar las características y normaliza las referencias.
+3. classify_test_image(...): analiza la imagen de prueba, extrae sus partículas y las clasifica comparándolas con las referencias normalizadas.
+4. evaluate_predictions(y_true, y_pred): evalúa los resultados de la clasificación mediante métricas y la matriz de confusión.
+5. plt.figure(...): crea la figura donde se mostrará la imagen resultante.
+6. plt.imshow(result_image): muestra la imagen con las partículas clasificadas.
+7. plt.title(...): añade el título a la figura.
+8. plt.axis("off"): oculta los ejes.
+9. plt.tight_layout(): ajusta la distribución de la figura.
+10. plt.show(): muestra la figura en pantalla.
