@@ -171,11 +171,81 @@ Una vez entrenado el modelo se han obtenido los siguientes resultados:
 
 <br>
   <p align="center">
-    <img src="ImagesReadme/confusion_matrix.png" width="800">
+    <img src="ImagesReadme/results.png" width="800">
   </p>
 <br>
 
+En esta imagen observamos diferentes tipos de gráficas. En la primera fila obtenemos los resultados durante el entrenamiento y el la segunda fila los de la validación:
+
+- train/box_loss: **Error en la localización de las cajas**
+- train/cls_loss: **Error de clasificación**
+- train/dfl_loss: **Error de distribución focal** (medida del error relacionada con la localización de las cajas delimitadoras, ayuda al modelo a ajustar mejor las coordenadas de los bordes de las cajas)
+- metrics/precision(B): **Precisión**, Indica qué proporción de las detecciones realizadas por el modelo son realmente correctas
+- metrics/recall(B): **Exhaustividad**, Indica qué proporción de las matrículas reales existentes en las imágenes consigue detectar el modelo
+
+De la segunda fila podemos destacar:
+- metrics/mAP50(B): **Mean Average Precision - 50%**, Métrica que evalúa la capacidad general del modelo para detectar correctamente los objetos. Considera una detección como correcta cuando la superposición entre la caja predicha y la caja real es igual o superior al 50 %.
+- metrics/mAP50-95(B): **Mean Average Precision -50 % al 95 %**, Métrica más exigente que la anterior, ya que calcula la precisión media utilizando diferentes umbrales de IoU, desde el 50 % hasta el 95 %, aumentando de 5 % en 5 %.
+
+En general se han obtenido unos resultados bastante buenos en el entrenamiento. Se ha alcanzado una precisión cercana al 85 %, lo que indica que la mayoría de las matrículas detectadas por el modelo son correctas. Además, se observa una evolución favorable de las pérdidas durante el entrenamiento y la validación, disminuyendo de manera constante a medida que aumentan las épocas. Esto demuestra que el modelo ha conseguido aprender las características necesarias para identificar matrículas a partir del conjunto de datos proporcionado.  
+
+Por otro lado, en la gráfica del train/class loss se puede observar una caída drástica en la primera época del entrenamiento. Esto puede deberse a varios motivos:
+- **Adaptación al nuevo conjunto de datos**: aunque se parte de un modelo preentrenado, este ha aprendido previamente a detectar objetos de otras categorías. Al entrenarlo con el dataset de matrículas, debe adaptar sus capas de detección y clasificación a la nueva tarea.
+- **Inicialización de las capas de detección**: las predicciones iniciales del modelo todavía no están suficientemente ajustadas a las matrículas de tu conjunto de datos. Por ello, los primeros errores pueden ser elevados.
+
+Mediante la gráfica F1, se puede ver que tan bueno es el modelo (combina precisión y recall) dependiendo de la confianza dada. En nuestro caso hemos decidido que con una confianza de 0.3 funciona mejor:
+
+<br>
+  <p align="center">
+    <img src="ImagesReadme/BoxF1_curve.png" width="800">
+  </p>
+<br>
+
+Sabiendo ya la confianza que debemos dar al modelo, ejecutamos el modelo con las imagenes de test:
+
+```python
+metrics = model.val(
+    data="dataset.yaml",
+    split="test",
+    imgsz=1920,
+    batch=4,
+    conf=0.35,
+    plots=True
+)
+```
+
+Mediante este programa obtenemos la siguiente matriz confusión:
+
+<br>
+  <p align="center">
+    <img src="ImagesReadme/confusion.png" width="800">
+  </p>
+<br>
+
+En la matrix confuisión podemos ver que se han detectado correctamente 337 matrículas. Por otro lado se detectan 53 objetos como matrículas que no lo son y hay 77 matrículas que no se detectan. A partir de estos resultados, obtenemos una precisión del 86,41 %, lo que significa que la mayoría de las detecciones realizadas por el modelo son correctas. Además, se calcula que tiene un recall del 81,40 %, indicando que consigue detectar aproximadamente 8 de cada 10 matrículas presentes en las imágenes.
+
+### Contador de Matrículas
+
+En este caso hemos vuelto a restringir y solo detectamos los coches que están en movimiento. 
+
+Se obtienen los siguientes resultados:  
+
+IDs de matrículas: [2, 11, 26, 27, 32, 39, 53, 60, 74, 76, 83, 89, 97, 110, 112, 113, 121, 130, 140, 148, 155, 156, 158, 168, 169, 170, 171, 178, 179]  
+TOTAL DE MATRÍCULAS: 29  
+
+De los 32 vehículos que se cuentan en un principio con la restricción de movimiento, contamos 29 matrículas.
 
 
+<br>
+  <p align="center">
+    <img src="ImagesReadme/deteccionMatricula.JPG" width="800">
+  </p>
+<br>
+
+<br>
+  <p align="center">
+    <img src="ImagesReadme/deteccionMatricula2.JPG" width="800">
+  </p>
+<br>
 
 ## OCR
