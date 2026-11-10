@@ -13,6 +13,13 @@ Hecho por:
 ## Modelo
 
 ### Detección de vehículos y personas
+
+<br>
+  <p align="center">
+    <img src="ImagesReadme/imagen1.JPG" alt="Montaje" width="800">
+  </p>
+<br>
+
 En este apartado, se ha utilizado el modelo de yolo26s para obtener el mejor resultado posible a la hora de detectar vehículos y personas. En primer lugar, se debe definir cuál es el índice de una clase concreta para este modelo:
 
 ```python
@@ -113,12 +120,60 @@ Por clase: {'guagua': 1, 'coche': 60, 'persona': 29, 'moto': 3, 'bicicleta': 1}
 
 Como era de esperar, hemos obtenido un mayor número de vehículos ya que ahora también se cuentan vehículos que aparecen en pantalla mas de 15 frames y que se no se desplazan en el vídeo. Por otro lado, el número de personas también ha aumentado a 29. Esto puede ser debido a que se trata de personas que aparecen solo unos pocos frames debido a que la detección fue muy dificil por la lejanía y antes se descartaba.
 
+<br>
+  <p align="center">
+    <img src="ImagesReadme/imagen2.JPG" width="800">
+  </p>
+<br>
 
+<br>
+  <p align="center">
+    <img src="ImagesReadme/imagen3.JPG"width="800">
+  </p>
+<br>
 
+### Detección de matrículas de los vehículos presentes
 
+Para realizar este apartado es necesario entrenar un modelo utilizando un dataset de imagenes con matrículas de vehículos. Los creadores de el dataset se encuentran en el fichero autoría.txt. El dataset esta formado por un total de 2350 imagenes.
 
+Entrenamiento del modelo:
 
+Se carga el modelo de yolo11n y utilizamos la función de train para entrenarlo. Se establecen los siguientes parámetros:
 
+- **data**: ruta del archivo dataset.yaml, que contiene la configuración del dataset.
+- **epochs=100**: establece un máximo de 100 épocas de entrenamiento.
+- **imgsz=1920**: establece el tamaño de entrada de las imágenes en 1920 píxeles.
+- **batch=8**: indica que se procesarán 8 imágenes por lote antes de actualizar los pesos.
+- **patience=20**: permite detener anticipadamente el entrenamiento si no se producen mejoras durante 20 épocas consecutivas.
+- **name="detector_matriculas"**: asigna un nombre al experimento.
+- **project="runs/detect"**: establece el directorio donde se guardarán los resultados.
+- **pretrained=True**: utiliza los pesos preentrenados de YOLO11n como punto de partida.
+- **resume=True**: permite reanudar un entrenamiento anterior desde el último checkpoint guardado.
+- **save=True**: habilita el guardado de los pesos y checkpoints del modelo.
+
+```python
+model = YOLO('yolo11n.pt')
+
+results = model.train(
+        data=r"C:\Users\Usuario\Desktop\P4 VC\dataset.yaml",
+        epochs=100,
+        imgsz=1920,
+        batch=8,
+        patience=20, 
+        name="detector_matriculas",
+        project="runs/detect",
+        save=True
+    )
+```
+
+El modelo ha sido entrenado en un ordenador con las siguientes características: i5-14600kf, 5060Ti, 32GB ram de 3200mhz y 1 SSD 1TB.  
+Una vez entrenado el modelo se han obtenido los siguientes resultados:  
+
+<br>
+  <p align="center">
+    <img src="ImagesReadme/confusion_matrix.png" width="800">
+  </p>
+<br>
 
 
 
