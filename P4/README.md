@@ -248,4 +248,8 @@ De los 32 vehículos que se cuentan en un principio con la restricción de movim
   </p>
 <br>
 
+### Video de la detección de matrículas
+
+https://drive.google.com/file/d/1CPG97xLR6oI7a9Uq4c9Y-G3Oq1INkNBA/view?usp=sharing 
+
 ## OCR
