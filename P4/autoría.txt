@@ -1,0 +1,49 @@
+Autoría - Dataset Matrículas - Visión por Computador ULPGC 2026/27
+
+Organización y creación del dataset:
+- Alejandra Rodríguez Silva
+
+Creación de script para anotar:
+- José Marcial Galván Franco
+- Solmaire Basulto Santana
+
+Anotaciones:
+- Arael Jesús Almeida González
+- Juan Francisco Almeida Santana
+- Eduardo Arbelo Rua-Figueroa
+- Solmaire Basulto Santana
+- Ubay Antonio Batista Santana
+- Texenery Bordón Rodríguez
+- Pablo Campos Rico
+- Dylan A. Castrillón Suárez
+- Pablo Damas Negrín
+- Vidal de León Giménez
+- Naiara Díaz Hernández
+- Alejandro David Fariña Afonso
+- José Marcial Galván Franco
+- Ricardo García Rodríguez
+- Álvaro García Suárez
+- Carla Gómez García
+- David González Espino
+- Marcos González Gómez
+- Néstor Jesús Henríquez Medina
+- Juan Daniel López Melainine
+- Iván Luján Moreno
+- Alejandro José Martel Torres
+- Félix José Miguel Velásquez
+- Carlos Luis Miranda Hernández
+- Mencey Montesdeoca Álamo
+- Yenedey Morán Delgado
+- José Miguel Ojeda Hernández
+- Alba Ramos Quintana
+- Ángel Sergio Reyes Guedes
+- Roberto Rodríguez Guillén
+- Sergio Rodríguez Rubio
+- Alejandra Rodríguez Silva
+- Alicia María Rodríguez Trujillo
+- Carmelo Aidan Romero Pérez
+- Kilian Santana Delgado
+- Cristina Santana Martín
+- Erick Justo Sosa
+- Enrique Sosa Ojeda
+- Cristian Tomás Vega Appelqvist
