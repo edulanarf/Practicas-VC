@@ -184,7 +184,7 @@ Mediante este programa obtenemos la siguiente matriz de confusión:
   </p>
 <br>
 
-En la matriz de confusión podemos ver que se han detectado correctamente 439 matrículas. Por otro lado se detectan 51 objetos como matrículas que no lo son y hay 92 matrículas que no se detectan. A partir de estos resultados, obtenemos una precisión del 89,6 %, lo que significa que la mayoría de las detecciones realizadas por el modelo son correctas. Además, se calcula que tiene un recall del 82,7 %, indicando que consigue detectar aproximadamente 8 de cada 10 matrículas presentes en las imágenes.
+En la matriz de confusión podemos ver que se han detectado correctamente 337 matrículas. Por otro lado se detectan 53 objetos como matrículas que no lo son y hay 77 matrículas que no se detectan. A partir de estos resultados, obtenemos una precisión del 89,6 %, lo que significa que la mayoría de las detecciones realizadas por el modelo son correctas.
 
 ### Detección de matrículas en el vídeo
 
