@@ -8,6 +8,8 @@ Hecho por:
 
 ## Índice 
 - [Filtro sin entrenamiento](#filtro-sin-entrenamiento)
+- [Entrenamiento del detector de emociones](#entrenamiento-del-detector-de-emociones)
+- [Juego: Simón dice emociones](#juego-simón-dice-emociones)
 
 ## Filtro sin entrenamiento
 Para este apartado hemos decidido desarrollar un filtro facial añadiendo al rostro unas gafas de sol. Por otro lado también realizamos una animación al abrir la boca en forma de "o" haciendo que salga humo de ella.
@@ -261,4 +263,130 @@ boca_en_o = ratio_boca > 0.15
 
 ### Resultado Final
 
+
+## Entrenamiento del detector de emociones
+Para la segunda parte entrenamos un modelo propio que mira una cara y dice qué emoción tiene. Está en el cuaderno `P5_entrenamiento_emociones.ipynb`.
+
+### Dataset
+Usamos **AffectNet** (versión de Kaggle): fotos de caras a color de 96x96 con 8 emociones. Viene dividido en train (17101 fotos), valid (5406) y test (2755).
+
+![Ejemplos del dataset](images/ejemplos_dataset.png)
+
+Lo elegimos porque las fotos son a color y está bastante balandeado:
+
+![Fotos de cada emoción](images/fotos_por_emocion.png)
+
+El dataset viene en formato YOLO (imágenes + un `.txt` con la clase), así que con el script `preparar_affectnet.py` metemos cada foto en una carpeta con el nombre de su emoción.
+
+### Cargar las fotos
+A cada foto le aplicamos estas transformaciones:
+
+```python
+transformacion = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+])
+```
+
+- Resize: la pone a 224x224, el tamaño que usa la ResNet.
+- ToTensor: la pasa a tensor con valores entre 0 y 1.
+- Normalize: la normaliza con los valores de ImageNet, que es con lo que se entrenó la red.
+
+Luego `ImageFolder` lee las carpetas (cada carpeta es una clase) y `DataLoader` nos da las fotos en lotes de 64.
+
+### Modelo
+Cogemos una **ResNet18** ya entrenada con ImageNet y solo le cambiamos la última capa para que tenga 8 salidas, una por emoción.
+
+```python
+modelo = models.resnet18(weights="DEFAULT")
+modelo.fc = nn.Linear(512, len(emociones))
+```
+
+### Entrenamiento
+Usamos `CrossEntropyLoss` como pérdida y `Adam` con un learning rate pequeño (0.0001), porque la red ya viene entrenada y solo hay que ajustarla.
+
+Entrenamos 10 épocas. En cada lote se predice, se calcula el error y se ajustan los pesos:
+
+```python
+salida = modelo(fotos)
+perdida = perdida_fn(salida, etiquetas)
+optimizador.zero_grad()
+perdida.backward()
+optimizador.step()
+```
+
+Al final de cada época medimos el acierto en valid y, si es el mejor hasta ahora, guardamos el modelo en `modelo_emociones.pt`.
+
+### Gráficas
+Debajo de la gráfica sale en qué ordenador se ha entrenado y cuánto ha tardado:
+
+![Gráficas del entrenamiento](images/graficas_entrenamiento.png)
+
+En train el acierto llega casi al 100%, pero en valid se queda en un 69% y la pérdida sube. Esto es **overfitting**: el modelo se aprende las fotos de memoria. Por eso guardamos la mejor época (la 7) y no la última.
+
+### Resultados
+Con las fotos de test el modelo acierta un **69%**. La matriz de confusión enseña en la diagonal los aciertos de cada emoción:
+
+![Matriz de confusión](images/matriz_confusion.png)
+
+- Happy es la que mejor reconoce (86%), la sonrisa se ve muy fácil.
+- Sad y Neutral son las peores, porque son caras muy parecidas.
+- Fear se confunde con Surprise, porque en las dos se abren mucho los ojos y la boca.
+
+### Comparación con DeepFace
+Pasamos 300 fotos de test por nuestro modelo y por `DeepFace.analyze` (quitando Contempt, que DeepFace no tiene):
+
+| Modelo | Acierto | Tiempo por foto |
+|---|---|---|
+| Nuestro modelo | **68.3%** | **14.8 ms** |
+| DeepFace | 34.3% | 23.4 ms |
+
+El nuestro acierta el doble y es más rápido, porque está entrenado con fotos como las del test.
+
+## Juego: Simón dice emociones
+El juego te pide una emoción y tienes unos segundos para ponerla delante de la webcam. Si aciertas sumas un punto y la siguiente ronda va más rápida; si se acaba el tiempo pierdes una vida. Con 3 vidas perdidas se acaba. Está en el cuaderno `P5_juego_simon_dice.ipynb`.
+
+### Cargar el modelo
+Creamos la ResNet18 igual que al entrenar y le cargamos los pesos guardados. La transformación tiene que ser la misma que en el entrenamiento.
+
+```python
+modelo = models.resnet18()
+modelo.fc = nn.Linear(512, 8)
+modelo.load_state_dict(torch.load("modelo_emociones.pt"))
+```
+
+### Sacar la emoción de la cara
+La función `sacar_emocion(frame)` hace esto:
+1. MediaPipe encuentra los puntos de la cara.
+2. Con el punto más a la izquierda, derecha, arriba y abajo sacamos el rectángulo de la cara.
+3. Le añadimos un **margen del 25%**.
+4. Recortamos la cara, se la pasamos al modelo y nos quedamos con la emoción más probable.
+
+El margen es importante: las fotos de AffectNet no están recortadas justo a la cara (se ve el pelo y la barbilla). Sin margen el modelo veía las caras distintas y fallaba mucho más.
+
+```python
+margen = int((x_max - x_min) * 0.25)
+```
+
+![Recorte sin y con margen](images/recorte_margen.png)
+
+### Bucle del juego
+En cada fotograma leemos la webcam, la ponemos en modo espejo, sacamos la emoción y dibujamos el rectángulo con lo que ve el modelo.
+
+Para que no cuente un acierto de casualidad, el modelo tiene que ver la emoción pedida **8 fotogramas seguidos**:
+
+```python
+if emocion == objetivo and prob > 0.5:
+    seguidos = seguidos + 1
+else:
+    seguidos = 0
+```
+
+- Si llega a 8: +1 punto, la ronda dura 0.2 s menos y se elige otra emoción.
+- Si se acaba el tiempo: -1 vida y otra emoción.
+
+En pantalla se escribe la emoción que hay que poner, el tiempo, los puntos y las vidas. Con **espacio** se vuelve a jugar y con **Esc** se sale.
+
+### Resultado Final
 
